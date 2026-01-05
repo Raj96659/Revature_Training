@@ -1,0 +1,32 @@
+Q. A web page has a button that logs "Start", then uses setTimeout to log "Async Task", and finally logs "End".
+ Explain the execution order using Call Stack, Callback Queue, and Event Loop. (Call Stack & Event Loop)
+
+
+JavaScript is single-threaded, meaning it can execute only one task at a time.
+
+To handle asynchronous operations, JavaScript uses:
+    Call Stack
+    Callback Queue
+    Event Loop
+
+Step-by-step Execution
+
+1. When the button is clicked, "Start" is pushed to the Call Stack and executed.
+
+2. setTimeout() registers the callback and sends it to the Callback Queue (even if delay is 0ms).
+
+3. "End" is synchronous, so it executes immediately.
+
+4. The Event Loop continuously checks:
+
+    Is Call Stack empty?
+
+    If yes → move callback from Callback Queue to Call Stack.
+
+5. "Async Task" is finally executed.
+
+Output Order :
+
+Start
+End
+Async Task

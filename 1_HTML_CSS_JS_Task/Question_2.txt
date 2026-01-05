@@ -1,0 +1,20 @@
+Q. You are loading ads after page load using setTimeout.
+ Why does the ad load after the main content even if the timeout is 0ms? (Callback Queue)
+
+
+
+> setTimeout(fn, 0) does NOT mean immediate execution.
+
+> Why Ads Load Later?
+
+    Browser must:
+    Execute current JavaScript
+    Render UI
+    Clear call stack
+
+> Only then the callback moves from Callback Queue → Call Stack
+
+> This ensures:
+
+    Main content loads first
+    Ads or heavy scripts load later
