@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>QuizVerse – Smart Quiz Portal</title>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+/* ================= GLOBAL ================= */
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(270deg,#667eea,#764ba2,#6b8cff);
+    background-size:400% 400%;
+    animation:bgMove 10s ease infinite;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* ================= QUIZ CARD ================= */
+.quiz-card{
+    background:#fff;
+    width:440px;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 25px 50px rgba(0,0,0,.25);
+    animation:cardEnter .6s ease;
+}
+
+@keyframes cardEnter{
+    from{transform:translateY(40px);opacity:0}
+    to{transform:translateY(0);opacity:1}
+}
+
+/* ================= HEADER ================= */
+.header{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.header h1{
+    margin:0;
+    font-size:26px;
+    color:#667eea;
+}
+
+.header p{
+    margin:4px 0 0;
+    font-size:13px;
+    color:#777;
+}
+
+/* ================= PROGRESS ================= */
+.progress{
+    height:6px;
+    background:#eee;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:18px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#667eea;
+    animation:pulse 1.4s infinite;
+    transition:.4s;
+}
+
+@keyframes pulse{
+    0%{opacity:1}
+    50%{opacity:.6}
+    100%{opacity:1}
+}
+
+/* ================= QUESTION ================= */
+.question{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:15px;
+    animation:fadeSlide .4s ease;
+}
+
+@keyframes fadeSlide{
+    from{opacity:0;transform:translateX(-10px)}
+    to{opacity:1;transform:translateX(0)}
+}
+
+/* ================= OPTIONS ================= */
+.option{
+    background:#f3f3f3;
+    padding:12px;
+    border-radius:10px;
+    margin:8px 0;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.option:hover{
+    background:#667eea;
+    color:#fff;
+    transform:scale(1.02);
+}
+
+.correct{
+    background:#28a745 !important;
+    color:#fff;
+}
+
+.wrong{
+    background:#dc3545 !important;
+    color:#fff;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+    font-size:14px;
+}
+
+/* ================= BUTTON ================= */
+.btn{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    background:#667eea;
+    color:#fff;
+    font-size:16px;
+    border-radius:10px;
+    cursor:pointer;
+    display:none;
+}
+
+/* ================= RESULT ================= */
+.result{
+    text-align:center;
+    animation:resultPop .8s ease;
+}
+
+@keyframes resultPop{
+    0%{transform:scale(.6);opacity:0}
+    80%{transform:scale(1.05)}
+    100%{transform:scale(1);opacity:1}
+}
+
+.badge{
+    margin-top:15px;
+    font-size:18px;
+    animation:float 2s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+    100%{transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-card">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🧠 QuizVerse</h1>
+        <p>Smart • Timed • Interactive Quiz Experience</p>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="question"></div>
+    <div class="options"></div>
+
+    <div class="footer">
+        <div>⏱ <span id="time">10</span>s</div>
+        <div>Score: <span id="score">0</span></div>
+    </div>
+
+    <button class="btn">Next</button>
+</div>
+
+<script>
+$(function(){
+
+const quiz=[
+ {q:"HTML stands for?",o:["Hyper Text Markup Language","High Text Machine","Hyper Tool"],a:0},
+ {q:"CSS is used for?",o:["Logic","Styling","Database"],a:1},
+ {q:"Which is JavaScript library?",o:["React","Django","Laravel"],a:0},
+ {q:"let keyword scope?",o:["Global","Block","Class"],a:1},
+ {q:"$ symbol belongs to?",o:["JavaScript","jQuery","PHP"],a:1}
+];
+
+let index=0,score=0,time=10,timer;
+
+function loadQuestion(){
+ $(".question").text(quiz[index].q);
+ $(".options").html("");
+ quiz[index].o.forEach((opt,i)=>{
+  $(".options").append(`<div class="option" data-id="${i}">${opt}</div>`);
+ });
+ $(".progress-bar").css("width",`${(index/quiz.length)*100}%`);
+ time=10;
+ $("#time").text(time);
+ startTimer();
+}
+
+function startTimer(){
+ timer=setInterval(()=>{
+  time--;
+  $("#time").text(time);
+  if(time===0) nextQuestion();
+ },1000);
+}
+
+$(document).on("click",".option",function(){
+ clearInterval(timer);
+ let ans=$(this).data("id");
+ $(".option").off("click");
+
+ if(ans===quiz[index].a){
+  $(this).addClass("correct");
+  score++;
+ }else{
+  $(this).addClass("wrong");
+  $(".option").eq(quiz[index].a).addClass("correct");
+ }
+ $("#score").text(score);
+ $(".btn").show();
+});
+
+$(".btn").click(nextQuestion);
+
+function nextQuestion(){
+ clearInterval(timer);
+ $(".btn").hide();
+ index++;
+ if(index<quiz.length){
+  loadQuestion();
+ }else{
+  showResult();
+ }
+}
+
+function showResult(){
+ $(".quiz-card").html(`
+  <div class="result">
+   <h2>🎉 Quiz Completed</h2>
+   <p><strong>Score:</strong> ${score}/${quiz.length}</p>
+   <p><strong>Accuracy:</strong> ${(score/quiz.length*100).toFixed(0)}%</p>
+   <div class="badge">
+     ${score>=4?"🔥 Excellent Performance":"👍 Good Effort"}
+   </div>
+  </div>
+ `);
+}
+
+loadQuestion();
+});
+</script>
+
+</body>
+</html>
