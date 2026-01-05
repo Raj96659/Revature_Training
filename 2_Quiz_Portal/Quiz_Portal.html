@@ -2,15 +2,10 @@
 <html lang="en">
 <head>
 <title>QuizVerse – Smart Quiz Portal</title>
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-/* ================= GLOBAL ================= */
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -30,13 +25,14 @@ body{
     100%{background-position:0% 50%}
 }
 
-/* ================= QUIZ CARD ================= */
-.quiz-card{
+/* ===== MAIN CARD (BIGGER) ===== */
+.card{
     background:#fff;
-    width:440px;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 25px 50px rgba(0,0,0,.25);
+    width:620px;                /* BIGGER */
+    min-height:420px;
+    padding:35px;               /* MORE SPACE */
+    border-radius:18px;
+    box-shadow:0 30px 60px rgba(0,0,0,.25);
     animation:cardEnter .6s ease;
 }
 
@@ -45,109 +41,100 @@ body{
     to{transform:translateY(0);opacity:1}
 }
 
-/* ================= HEADER ================= */
-.header{
+/* ===== HEADER ===== */
+h1{
     text-align:center;
-    margin-bottom:15px;
-}
-
-.header h1{
-    margin:0;
-    font-size:26px;
     color:#667eea;
+    margin-bottom:8px;
 }
 
-.header p{
-    margin:4px 0 0;
-    font-size:13px;
-    color:#777;
+p{
+    text-align:center;
+    color:#555;
+    font-size:15px;
 }
 
-/* ================= PROGRESS ================= */
+/* ===== INPUT ===== */
+input{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+/* ===== BUTTON ===== */
+.btn{
+    width:100%;
+    margin-top:25px;
+    padding:14px;
+    border:none;
+    background:#667eea;
+    color:#fff;
+    font-size:17px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+/* ===== PROGRESS ===== */
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin-bottom:8px;
+    color:#444;
+}
+
 .progress{
-    height:6px;
+    height:10px;
     background:#eee;
-    border-radius:10px;
+    border-radius:12px;
     overflow:hidden;
-    margin-bottom:18px;
+    margin-bottom:22px;
 }
 
 .progress-bar{
     height:100%;
     width:0%;
     background:#667eea;
-    animation:pulse 1.4s infinite;
-    transition:.4s;
+    transition:width .5s ease;
 }
 
-@keyframes pulse{
-    0%{opacity:1}
-    50%{opacity:.6}
-    100%{opacity:1}
-}
-
-/* ================= QUESTION ================= */
+/* ===== QUESTION ===== */
 .question{
-    font-size:18px;
+    font-size:20px;
     font-weight:600;
-    margin-bottom:15px;
-    animation:fadeSlide .4s ease;
+    margin-bottom:20px;
 }
 
-@keyframes fadeSlide{
-    from{opacity:0;transform:translateX(-10px)}
-    to{opacity:1;transform:translateX(0)}
-}
-
-/* ================= OPTIONS ================= */
+/* ===== OPTIONS ===== */
 .option{
-    background:#f3f3f3;
-    padding:12px;
-    border-radius:10px;
-    margin:8px 0;
+    background:#f4f4f4;
+    padding:14px;
+    border-radius:12px;
+    margin:10px 0;
     cursor:pointer;
-    transition:.3s;
+    transition:.25s;
 }
 
 .option:hover{
     background:#667eea;
     color:#fff;
-    transform:scale(1.02);
 }
 
-.correct{
-    background:#28a745 !important;
-    color:#fff;
-}
+.correct{background:#28a745 !important;color:#fff}
+.wrong{background:#dc3545 !important;color:#fff}
 
-.wrong{
-    background:#dc3545 !important;
-    color:#fff;
-}
-
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 .footer{
     display:flex;
     justify-content:space-between;
-    margin-top:15px;
-    font-size:14px;
+    margin-top:20px;
+    font-size:15px;
 }
 
-/* ================= BUTTON ================= */
-.btn{
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-    border:none;
-    background:#667eea;
-    color:#fff;
-    font-size:16px;
-    border-radius:10px;
-    cursor:pointer;
-    display:none;
-}
-
-/* ================= RESULT ================= */
+/* ===== RESULT ===== */
 .result{
     text-align:center;
     animation:resultPop .8s ease;
@@ -158,66 +145,93 @@ body{
     80%{transform:scale(1.05)}
     100%{transform:scale(1);opacity:1}
 }
-
-.badge{
-    margin-top:15px;
-    font-size:18px;
-    animation:float 2s ease-in-out infinite;
-}
-
-@keyframes float{
-    0%{transform:translateY(0)}
-    50%{transform:translateY(-8px)}
-    100%{transform:translateY(0)}
-}
 </style>
 </head>
 
 <body>
 
-<div class="quiz-card">
-
-    <!-- HEADER -->
-    <div class="header">
-        <h1>🧠 QuizVerse</h1>
-        <p>Smart • Timed • Interactive Quiz Experience</p>
-    </div>
-
-    <div class="progress">
-        <div class="progress-bar"></div>
-    </div>
-
-    <div class="question"></div>
-    <div class="options"></div>
-
-    <div class="footer">
-        <div>⏱ <span id="time">10</span>s</div>
-        <div>Score: <span id="score">0</span></div>
-    </div>
-
-    <button class="btn">Next</button>
-</div>
+<div class="card" id="app"></div>
 
 <script>
 $(function(){
 
+let username="";
+let index=0,score=0,time=10,timer;
+
 const quiz=[
- {q:"HTML stands for?",o:["Hyper Text Markup Language","High Text Machine","Hyper Tool"],a:0},
- {q:"CSS is used for?",o:["Logic","Styling","Database"],a:1},
+ {q:"Which one is not the CSS Selector?",o:["Inline","Internal","Hybrid"],a:2},
+ {q:"CSS is used for?",o:["Security","Styling","PipeLine"],a:1},
  {q:"Which is JavaScript library?",o:["React","Django","Laravel"],a:0},
  {q:"let keyword scope?",o:["Global","Block","Class"],a:1},
  {q:"$ symbol belongs to?",o:["JavaScript","jQuery","PHP"],a:1}
 ];
 
-let index=0,score=0,time=10,timer;
+/* ---------- START SCREEN ---------- */
+function startScreen(){
+ $("#app").html(`
+  <h1>🧠 QuizVerse</h1>
+  <p>Enter your name to begin the challenge</p>
+  <input type="text" id="name" placeholder="Your Name">
+  <button class="btn" id="start">Start Quiz</button>
+ `);
+}
+
+$(document).on("click","#start",function(){
+ username=$("#name").val().trim();
+ if(username===""){ alert("Please enter your name"); return; }
+ instructionScreen();
+});
+
+/* ---------- INSTRUCTIONS ---------- */
+function instructionScreen(){
+ $("#app").html(`
+  <h1>📜 Instructions</h1>
+  <p>• 5 questions</p>
+  <p>• 10 seconds per question</p>
+  <p>• Auto move on timeout</p>
+  <p>• No negative marking</p>
+  <button class="btn" id="begin">Begin Quiz</button>
+ `);
+}
+
+$(document).on("click","#begin",quizScreen);
+
+/* ---------- QUIZ ---------- */
+function quizScreen(){
+ $("#app").html(`
+  <div class="progress-info">
+    <div>Question <span id="qno">1</span> of ${quiz.length}</div>
+    <div>Progress</div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="question"></div>
+  <div class="options"></div>
+
+  <div class="footer">
+    <div>⏱ <span id="time">10</span>s</div>
+    <div>Score: <span id="score">0</span></div>
+  </div>
+
+  <button class="btn" id="next" style="display:none">Next</button>
+ `);
+ loadQuestion();
+}
 
 function loadQuestion(){
+ $("#qno").text(index+1);
  $(".question").text(quiz[index].q);
  $(".options").html("");
- quiz[index].o.forEach((opt,i)=>{
-  $(".options").append(`<div class="option" data-id="${i}">${opt}</div>`);
+
+ quiz[index].o.forEach((op,i)=>{
+  $(".options").append(`<div class="option" data-id="${i}">${op}</div>`);
  });
- $(".progress-bar").css("width",`${(index/quiz.length)*100}%`);
+
+ $(".progress-bar").css("width",`${((index)/quiz.length)*100}%`);
+
  time=10;
  $("#time").text(time);
  startTimer();
@@ -227,7 +241,7 @@ function startTimer(){
  timer=setInterval(()=>{
   time--;
   $("#time").text(time);
-  if(time===0) nextQuestion();
+  if(time===0) next();
  },1000);
 }
 
@@ -244,36 +258,33 @@ $(document).on("click",".option",function(){
   $(".option").eq(quiz[index].a).addClass("correct");
  }
  $("#score").text(score);
- $(".btn").show();
+ $("#next").show();
 });
 
-$(".btn").click(nextQuestion);
+$(document).on("click","#next",next);
 
-function nextQuestion(){
+function next(){
  clearInterval(timer);
- $(".btn").hide();
+ $("#next").hide();
  index++;
- if(index<quiz.length){
-  loadQuestion();
- }else{
-  showResult();
- }
+ if(index<quiz.length) loadQuestion();
+ else showResult();
 }
 
+/* ---------- RESULT ---------- */
 function showResult(){
- $(".quiz-card").html(`
+ $(".progress-bar").css("width","100%");
+ $("#app").html(`
   <div class="result">
-   <h2>🎉 Quiz Completed</h2>
+   <h1>🎉 Well Done, ${username}!</h1>
    <p><strong>Score:</strong> ${score}/${quiz.length}</p>
    <p><strong>Accuracy:</strong> ${(score/quiz.length*100).toFixed(0)}%</p>
-   <div class="badge">
-     ${score>=4?"🔥 Excellent Performance":"👍 Good Effort"}
-   </div>
+   <p>${score>=4?"🔥 Excellent Performance":"👍 Good Effort"}</p>
   </div>
  `);
 }
 
-loadQuestion();
+startScreen();
 });
 </script>
 
