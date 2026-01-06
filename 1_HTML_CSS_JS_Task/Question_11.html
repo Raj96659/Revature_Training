@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Validation</title>
+</head>
+<body>
+<script>
+  function validateUser(username, callback) {
+    if (username === "admin") {
+      callback("Login successful");
+    } else {
+      callback("Invalid user");
+    }
+  }
+
+  validateUser("admin", function(message) {
+    console.log(message);
+    console.log("Redirecting to dashboard...");
+  });
+</script>
+</body>
+</html>

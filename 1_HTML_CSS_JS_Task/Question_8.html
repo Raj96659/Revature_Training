@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart Total using reduce</title>
+</head>
+<body>
+<script>
+  const cart = [
+    { item: "Laptop", price: 50000 },
+    { item: "Mouse", price: 1000 },
+    { item: "Keyboard", price: 2000 }
+  ];
+
+  const total = cart.reduce((sum, product) => sum + product.price, 0);
+
+  console.log("Total Price:", total);
+</script>
+</body>
+</html>

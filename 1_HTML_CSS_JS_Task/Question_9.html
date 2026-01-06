@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Function vs Arrow</title>
+</head>
+<body>
+<script>
+  // Function Declaration
+  function calculateGST(price) {
+    return price * 0.18;
+  }
+
+  // Arrow Function
+  const calculateGSTArrow = price => price * 0.18;
+
+  console.log(calculateGST(1000));
+  console.log(calculateGSTArrow(1000));
+</script>
+</body>
+</html>
